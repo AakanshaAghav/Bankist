@@ -77,150 +77,59 @@ const displayMovements = function (movements) {
   });
 };
 
-displayMovements(account1.movements);
 
-/////////////////////////////////////////////////
-/////////////////////////////////////////////////
-// LECTURES
-
-
-
-//const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
-
-/////////////////////////////////////////////////
-/*
-
-// Working with array
-let arr = ['a', 'b', 'c', 'd', 'e'];
-
-//Slice
-
-console.log(arr.slice(2));
-console.log(arr.slice(2,4));
-console.log(arr.slice(-2));
-console.log(arr.slice(-1));
-console.log(arr.slice(1,-2));
-console.log(arr.slice());
-console.log([...arr]);
-
-//Splice
-arr.splice(-1);
-console.log(arr);
-
-arr.splice(1,2);
-console.log(arr);
-
-//reverse
-arr = ['a', 'b', 'c', 'd', 'e'];
-const arr2 = ['f', 'j', 'k', 'l'];
-console.log(arr2.reverse());
-console.log(arr2);
-
-//concat
-const letters = arr.concat(arr2);
-console.log(letters);
-
-console.log([...arr,...arr2]);
-
-//Join
-console.log(letters.join('-'));
-
-//at method
-const arr3 = [23, 85, 69];
-console.log(arr[0]);
-console.log(arr.at(0));
-
-console.log(arr[arr.length-1]);
-console.log(arr.at(-1)); // this is adv. of 'at' method
-
-console.log('Sakshi'.at(0)); // also work with strings
-
-*/
-/*
-const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
-
-for (const [i, movement] of movements.entries()) {
-  if (movement > 0) {
-    console.log(`Movement ${i + 1}: You deposited ${movement}`);
-  } else {
-    console.log(`Movement ${i + 1}: You withdrew ${Math.abs(movement)}`);
-  }
+const calcDisplayBalance = function (movements) {
+  const balance = movements.reduce((acc, mov) => acc + mov, 0);
+  labelBalance.textContent = `${balance}€`;
 };
 
-console.log('---ForEach---');
+const calcDisplaySummary = function (acc) {
+  const income = acc.movements.filter(mov => mov > 0).reduce((acc, mov) => acc + mov, 0);
+  labelSumIn.textContent = `${income}€`;
 
-movements.forEach(function (mov, i, arr) {
-  if (mov > 0) {
-    console.log(`Movement ${i + 1}: You deposited ${mov}`);
-  } else {
-    console.log(`Movement ${i + 1}: You withdrew ${Math.abs(mov)}`);
-  }
-});
+  const out = Math.abs(acc.movements.filter(mov => mov < 0).reduce((acc, mov) => acc + mov, 0));
+  labelSumOut.textContent = `${out}€`;
 
-const currencies = new Map([
-  ['USD', 'United States dollar'],
-  ['EUR', 'Euro'],
-  ['GBP', 'Pound sterling'],
-]);
+  const interest = acc.movements.filter(mov => mov > 0).map(deposite => deposite * acc.interestRate / 100).filter(int => int >= 1).reduce((acc, int) => acc + int, 0);
+  labelSumInterest.textContent = `${interest}€`;
 
-//for each with map
-currencies.forEach(function (value, key, map) {
-  console.log(`${key}: ${value}`);
-});
+};
 
-//for each with set
-const currenciesUnique = new Set(['USD', 'GBP', 'USD', 'EUR', 'EUR']);
-
-console.log(currenciesUnique);
-
-currenciesUnique.forEach(function (value, _, set) {
-  console.log(`${value}: ${value}`);
-});
-*/
-
-// Coding Challenge #1
-
-/* 
-Julia and Kate are doing a study on dogs. So each of them asked 5 dog owners about their dog's age, and stored the data into an array (one array for each). For now, they are just interested in knowing whether a dog is an adult or a puppy. A dog is an adult if it is at least 3 years old, and it's a puppy if it's less than 3 years old.
-
-Create a function 'checkDogs', which accepts 2 arrays of dog's ages ('dogsJulia' and 'dogsKate'), and does the following things:
-
-1. Julia found out that the owners of the FIRST and the LAST TWO dogs actually have cats, not dogs! So create a shallow copy of Julia's array, and remove the cat ages from that copied array (because it's a bad practice to mutate function parameters)
-2. Create an array with both Julia's (corrected) and Kate's data
-3. For each remaining dog, log to the console whether it's an adult ("Dog number 1 is an adult, and is 5 years old") or a puppy ("Dog number 2 is still a puppy 🐶")
-4. Run the function for both test datasets
-
-HINT: Use tools from all lectures in this section so far 😉
-
-TEST DATA 1: Julia's data [3, 5, 2, 12, 7], Kate's data [4, 1, 15, 8, 3]
-TEST DATA 2: Julia's data [9, 16, 6, 8, 3], Kate's data [10, 5, 6, 1, 4]
-
-GOOD LUCK 😀
-*/
-
-const checkDogs = function (dogsJulia, dogsKate) {
-  const juliaDogs = dogsJulia.slice(1, -2);
-
-  const dogs = juliaDogs.concat(dogsKate);
-
-  dogs.forEach(function (age, i) {
-    if (age >= 3) {
-      console.log(`Dog number ${i + 1} is an adult, and is ${age} years old`);
-    } else {
-      console.log(`Dog number ${i + 1} is still a puppy 🐶`);
-    }
+const createUsernames = function (accs) {
+  accs.forEach(function (acc) {
+    acc.username = acc.owner.toLowerCase().split(' ').map(name => name[0]).join('');
   });
 };
 
-checkDogs([3, 5, 2, 12, 7], [4, 1, 15, 8, 3]);
+createUsernames(accounts);
 
+//Event Handler
 
+let currentAccount;
+btnLogin.addEventListener('click', function (e) {
+  //Prevent form from submitting
+  e.preventDefault();
 
+  currentAccount = accounts.find(acc => acc.username === inputLoginUsername.value);
 
+  console.log(currentAccount);
+  
+  if(currentAccount?.pin === Number(inputLoginPin.value)){
+    //Display UI and message
+    labelWelcome.textContent = `Welcome back, ${currentAccount.owner.split(' ')[0]}`;
+    containerApp.style.opacity = 100;
 
+    //clear input fields
+    inputLoginUsername.value = inputLoginPin.value = ' ';
+    //inputLoginPin.blur();
 
+    //Display movements
+    displayMovements(currentAccount.movements);
 
+    //Display balance
+    calcDisplayBalance(currentAccount.movements);
 
-
-
-
+    //Display Summary
+    calcDisplaySummary(currentAccount);
+  }
+});
