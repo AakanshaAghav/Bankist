@@ -68,5 +68,6 @@ This project simulates real-world banking operations like viewing transactions, 
 ---
 
 ## 📜 License
+This project is licensed under the [MIT License](./LICENSE).  
+It is created for **learning purposes only** and is **not a real banking application**.
 
-This project is for learning purposes only. Not a real banking application.
