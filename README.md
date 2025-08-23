@@ -52,6 +52,11 @@ This project simulates real-world banking operations like viewing transactions, 
 
 ---
 
+## 📸 Preview
+
+![Bankist App Screenshot](./assets/Screenshot.png)
+
+
 ## 📌 Learning Outcome
 
 **This project helped me practice:**
