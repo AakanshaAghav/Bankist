@@ -135,6 +135,13 @@ btnLogin.addEventListener('click', function (e) {
     labelWelcome.textContent = `Welcome back, ${currentAccount.owner.split(' ')[0]}`;
     containerApp.style.opacity = 100;
 
+    // Show current date
+    const now = new Date();
+    const day = `${now.getDate()}`.padStart(2, '0');
+    const month = `${now.getMonth() + 1}`.padStart(2, '0');
+    const year = now.getFullYear();
+
+    labelDate.textContent = `${day}/${month}/${year}`;
     //clear input fields
     inputLoginUsername.value = inputLoginPin.value = '';
     inputLoginPin.blur();
@@ -173,6 +180,7 @@ btnLoan.addEventListener('click', function (e) {
 
     //update ui
     updateUi(currentAccount);
+    inputLoanAmount.value = '';
   }
 })
 
@@ -187,6 +195,9 @@ btnClose.addEventListener('click', function (e) {
 
     //Hide ui
     containerApp.style.opacity = 0;
+
+    //label
+    labelWelcome.textContent = 'Log in to get started';
   }
   inputCloseUsername.value = inputClosePin.value = '';
 
