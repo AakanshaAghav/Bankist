@@ -78,6 +78,13 @@ const displayMovements = function (movements, sort = false) {
     `;
 
     containerMovements.insertAdjacentHTML('afterbegin', html);
+    [...document.querySelectorAll('.movements__row')].forEach((row, i) => {
+      if (i % 2 === 0) {
+        row.style.backgroundColor = "#f0f9ff"; // Light sky blue
+      } else {
+        row.style.backgroundColor = "#e6ffe6"; // Soft mint green
+      }
+    });
   });
 };
 
@@ -152,7 +159,7 @@ btnLogin.addEventListener('click', function (e) {
 
 btnTransfer.addEventListener('click', function (e) {
   e.preventDefault();
-  const amount = Number(inputTransferAmount.value);
+  const amount = Math.floor(inputTransferAmount.value);
   const receiverAcc = accounts.find(acc => acc.username === inputTransferTo.value);
 
   console.log(amount);
@@ -172,7 +179,7 @@ btnTransfer.addEventListener('click', function (e) {
 btnLoan.addEventListener('click', function (e) {
   e.preventDefault();
 
-  const amount = Number(inputLoanAmount.value);
+  const amount = Math.floor(inputLoanAmount.value);
 
   if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
     //Add movement
